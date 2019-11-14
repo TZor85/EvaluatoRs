@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace AdminApp.Data.Residentes
+namespace IdentityServerAspNetIdentity.Data.Residentes
 {
-    public class ResidentesService : IResidentesService
+    public class ResidenteDso
     {
+
+
     }
 }

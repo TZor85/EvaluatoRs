@@ -1,5 +1,66 @@
-﻿<h3>Residentes</h3>
+﻿@page "/residentes"
+@*@inject ResidentesService residenteService*@
+
+
+
+        <h3>Residentes</h3>
+
+        <div class="col-lg-12 col-sm-12 col-md-12">
+
+            <button class="btn btn-success">Añadir Residente</button>
+
+        </div>
+
+        <br />
+
+        <div class="col-lg-10 col-sm-10 col-md-10">
+
+            <h3><b>Residentes</b></h3>
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Nombre</th>
+                        <th>Apellidos</th>
+                        <th>Año Residente</th>
+                        <th>Especialidad</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var residente in ResidentesList)
+                    {
+                        <tr>
+                            <td>
+                                <NavLink href=@string.Format("/residentes/ResidenteDetail/{0}", residente.Id)>
+                                    Id: @residente.Id
+                                </NavLink>
+                            </td>
+                            <td>@residente.FirstName </td>
+                            <td> @residente.LastName</td>
+                            <td>@residente.YearResident</td>
+                            <td>@residente.Especialidad</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+
+        </div>
+
 
 @code {
+    public ResidenteModel residente { get; set; }
+    public List<ResidenteModel> ResidentesList { get; set; }
+
+    protected override void OnInitialized()
+    {
+        residente = new ResidenteModel();
+        //ResidentesList = residenteService.GetResidentes();
+        ResidentesList = new List<ResidenteModel>
+        {
+            new ResidenteModel { Id = 1, FirstName = "Nombre1", LastName = "Apellidos1",  YearResident = 2, Especialidad = 2 }
+        };
+    }
 
 }

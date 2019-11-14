@@ -1,22 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using AdminApp.Data;
+using IdentityServerAspNetIdentity.Data.Residentes;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using AdminApp.Data;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc.Authorization;
-using Microsoft.AspNetCore.Http;
 using System.IdentityModel.Tokens.Jwt;
-using Microsoft.AspNetCore.Authentication;
-using System.Net.Http;
-
 
 namespace AdminApp
 {
@@ -81,16 +72,14 @@ namespace AdminApp
             // BLAZOR COOKIE Auth Code (end)
             // ******
 
-            
-
             services.AddRazorPages();
             services.AddServerSideBlazor();            
             services.AddSingleton<WeatherForecastService>();
-            services.AddSingleton<TokenContainer>();            
-                        
+            services.AddSingleton<TokenContainer>();
+            
             services.AddHttpContextAccessor();
-            
-            
+            //services.AddScoped<IResidentesService, ResidentesService>();
+            services.AddSingleton<ResidentesService>();
 
         }
 

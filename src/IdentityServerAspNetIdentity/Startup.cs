@@ -4,6 +4,7 @@
 
 using IdentityServer4.Models;
 using IdentityServerAspNetIdentity.Data;
+using IdentityServerAspNetIdentity.Data.Residentes;
 using IdentityServerAspNetIdentity.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -57,6 +58,7 @@ namespace IdentityServerAspNetIdentity
 
             services.AddLocalApiAuthentication();
 
+            
 
             var builder = services.AddIdentityServer(options =>
                 {
@@ -73,6 +75,8 @@ namespace IdentityServerAspNetIdentity
 
             // not recommended for production - you need to store your key material somewhere secure
             builder.AddDeveloperSigningCredential();
+
+            services.AddSingleton<ResidentesService>();
 
             //////services.AddAuthentication()
             //////    .AddGoogle(options =>
