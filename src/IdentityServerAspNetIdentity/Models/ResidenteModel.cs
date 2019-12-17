@@ -20,6 +20,7 @@ namespace IdentityServerAspNetIdentity.Models
         public string LastName { get; set; }
 
         [Required]
+        [Range(1, 5, ErrorMessage = "El año de residencia debe estar entre 1 y 5")]
         [Display(Name = "Año de residencia")]
         public int YearResident { get; set; }
 

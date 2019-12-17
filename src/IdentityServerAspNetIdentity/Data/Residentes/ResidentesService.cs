@@ -7,7 +7,7 @@ using IdentityServerAspNetIdentity.Models;
 
 namespace IdentityServerAspNetIdentity.Data.Residentes
 {
-    public class ResidentesService //: IResidentesService
+    public class ResidentesService : IResidentesService
     {
         private ApplicationDbContext _context;
 

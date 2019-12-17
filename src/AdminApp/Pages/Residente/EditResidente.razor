@@ -1,0 +1,97 @@
+﻿@inject ResidenteService Service;
+@inject IModalService Modal
+@inject IModalService ModalService
+@using AdminApp.Models.Residentes
+
+
+<div class="panel panel-default">
+
+    <div class="panel-heading">
+        @*<h3 class="panel-title">Nuevo Residente</h3>*@
+    </div>
+
+    <div class="panel-body">
+        <div class="container-fluid">
+            <div class="form-group">
+                <label for="NameFormControl">Nombre</label>
+                <input type="text" class="form-control" @bind="residente.FirstName" />
+            </div>
+            <div class="form-group">
+                <label for="LastNameFormControl">Apellidos</label>
+                <input type="text" class="form-control" @bind="residente.LastName" />
+            </div>
+            <div class="form-group">
+                <label for="RYearFormControl">Año Residencia</label>
+                <input type="number" class="form-control" @bind="residente.YearResident" />
+            </div>
+            <div class="form-group">
+                <label for="EspecialidadFormControl">Especialidad</label>
+                <select class="form-control" @bind="residente.Especialidad" readonly>
+                    @foreach (var item in DropDownTipoEspecialidad)
+                    {
+                        <option value="@item.Id">@item.Descripcion</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <button class="btn btn-success" @onclick="SaveResidente">Añadir</button>
+                <button @onclick="@Cancel" class="btn btn-secondary">Cancel</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+@code {
+
+    
+    public Residente residente { get; set; } = new Residente();
+
+    [CascadingParameter]
+    ModalParameters Parameters { get; set; }
+
+    public class TipoEspecialidad
+    {
+        public int Id { get; set; }
+        public string Descripcion { get; set; }
+    }
+
+    public List<TipoEspecialidad> DropDownTipoEspecialidad = new List<TipoEspecialidad>
+{
+        new TipoEspecialidad() { Id = 1, Descripcion = "Medicina Familiar y Comunitaria"},
+        new TipoEspecialidad() { Id = 2, Descripcion = "Anestesiología y Reanimación"},
+        new TipoEspecialidad() { Id = 3, Descripcion = "Medicina Interna"},
+        new TipoEspecialidad() { Id = 4, Descripcion = "Cardiología"},
+        new TipoEspecialidad() { Id = 5, Descripcion = "Neumología"},
+        new TipoEspecialidad() { Id = 6, Descripcion = "Medicina Intensiva"},
+        new TipoEspecialidad() { Id = 7, Descripcion = "Cirugía General"},
+        new TipoEspecialidad() { Id = 8, Descripcion = "Radiodiagnóstico"},
+        new TipoEspecialidad() { Id = 9, Descripcion = "Cirugía Ortopédica y Traumatología"},
+        new TipoEspecialidad() { Id = 10, Descripcion = "Medicina Preventiva"},
+        new TipoEspecialidad() { Id = 11, Descripcion = "Oncología Radioterápica"},
+        new TipoEspecialidad() { Id = 12, Descripcion = "Medicina Nuclear"},
+        new TipoEspecialidad() { Id = 13, Descripcion = "Psiquiatría"},
+        new TipoEspecialidad() { Id = 14, Descripcion = "Urologia"},
+        new TipoEspecialidad() { Id = 15, Descripcion = "Oncología Médica"},
+        new TipoEspecialidad() { Id = 16, Descripcion = "Dermatología"},
+    };
+
+
+    protected override void OnInitialized()
+    {
+        residente = Parameters.Get<Residente>("Residente");
+    }
+
+    void Cancel()
+    {
+        ModalService.Close(ModalResult.Cancel());
+    }
+
+    void SaveResidente()
+    {
+        
+        ModalService.Close(ModalResult.Ok<Residente>(residente));
+
+    }
+}

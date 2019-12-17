@@ -1,0 +1,158 @@
+﻿@page "/residentes"
+@*@inject ResidentesService residenteService*@
+@inject ResidenteService Service;
+@inject IModalService Modal
+@using AdminApp.Models.Residentes;
+
+
+    @*<div class="col-lg-12 col-sm-12 col-md-12">
+        <button @onclick="@(() => ShowNewResidente(ResidentesList))" class="btn btn-primary">Añadir Residente</button>
+    </div>
+
+<br />*@
+
+<div class="col-lg-10 col-sm-10 col-md-10">
+
+    <h3><b>Residentes</b></h3>
+    
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Apellidos</th>
+                <th>Año Residente</th>
+                <th>Especialidad</th>
+                <th><button @onclick="@(() => ShowNewResidente())" class="btn btn-success">Añadir</button></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var residente in ResidentesList)
+            {
+                <tr>
+                    <td>
+                        <NavLink href=@string.Format("/residentes/ResidenteDetail/{0}", residente.Id)>
+                            Id: @residente.Id
+                        </NavLink>
+                    </td>
+                    <td>@residente.FirstName </td>
+                    <td>@residente.LastName</td>
+                    <td>@residente.YearResident</td>
+                    <td>@TipoEspecialidad.Where(x => x.Id == residente.Especialidad).FirstOrDefault().Descripcion</td>
+                    <td>
+                        <button @onclick="@(() => ShowEditResidente(residente.Id))" class="btn btn-primary"><span class="oi oi-pencil" aria-hidden="true"></span></button>
+                        <button @onclick="@(() => ConfirmDelete(residente.Id))" class="btn btn-danger"><span class="oi oi-trash" aria-hidden="true"></span></button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>
+
+
+@code {
+
+    public List<Residente> ResidentesList { get; set; }
+    private bool Collapsed = true;
+    public Residente residente { get; set; }
+    string residenteId;
+
+    protected override async Task OnInitializedAsync()
+    {
+        ResidentesList = await Service.GetResidentesAsync();
+    }
+
+    void ShowNewResidente()
+    {
+        Modal.OnClose += ModalClosed;
+
+        Modal.Show<AddResidente>("Nuevo Residente");
+    }
+
+    private async void ModalClosed(ModalResult result)
+    {
+        if (!result.Cancelled)
+        {
+            ResidentesList.Add((Residente)result.Data);
+            this.StateHasChanged();
+        }
+        
+
+        Modal.OnClose -= ModalClosed;
+    }
+
+    void DeleteResidente(string idResidente)
+    {
+        if (!string.IsNullOrEmpty(idResidente))
+        {
+            Residente residente = ResidentesList.Where(x => x.Id == idResidente).FirstOrDefault();
+            ResidentesList.Remove(residente);
+        }
+    }
+
+    private void ConfirmDelete(string id)
+    {
+        this.residenteId = id;
+        ModalParameters parameters = new ModalParameters();
+        parameters.Add("Message", "¿Está seguro que desea eliminar este residente?");
+        parameters.Add("YesText", "Confirmar");
+        parameters.Add("NoText", "Cancelar");
+
+        Modal.OnClose += ModalDeleteClosed;
+        Modal.Show<ConfirmDelete>("Confirmación de borrado", parameters);
+
+    }
+
+    private async void ModalDeleteClosed(ModalResult result)
+    {
+        if (!result.Cancelled)
+        {
+            DeleteResidente(this.residenteId);
+            this.StateHasChanged();
+        }
+
+        Modal.OnClose -= ModalDeleteClosed;
+    }
+
+    void ShowEditResidente(string idResidente)
+    {
+        ModalParameters parameters = new ModalParameters();
+        Residente residente = ResidentesList.Where(x => x.Id == idResidente).FirstOrDefault();
+
+        parameters.Add("Residente", residente);
+        Modal.OnClose += ModalEditClosed;
+
+        Modal.Show<EditResidente>("Editar", parameters);
+    }
+
+    private async void ModalEditClosed(ModalResult result)
+    {
+        if (!result.Cancelled)
+        {
+            this.StateHasChanged();
+        }
+
+        Modal.OnClose -= ModalEditClosed;
+    }
+
+    public List<TipoEspecialidad> TipoEspecialidad = new List<TipoEspecialidad>
+    {
+        new TipoEspecialidad() { Id = 1, Descripcion = "Medicina Familiar y Comunitaria"},
+        new TipoEspecialidad() { Id = 2, Descripcion = "Anestesiología y Reanimación"},
+        new TipoEspecialidad() { Id = 3, Descripcion = "Medicina Interna"},
+        new TipoEspecialidad() { Id = 4, Descripcion = "Cardiología"},
+        new TipoEspecialidad() { Id = 5, Descripcion = "Neumología"},
+        new TipoEspecialidad() { Id = 6, Descripcion = "Medicina Intensiva"},
+        new TipoEspecialidad() { Id = 7, Descripcion = "Cirugía General"},
+        new TipoEspecialidad() { Id = 8, Descripcion = "Radiodiagnóstico"},
+        new TipoEspecialidad() { Id = 9, Descripcion = "Cirugía Ortopédica y Traumatología"},
+        new TipoEspecialidad() { Id = 10, Descripcion = "Medicina Preventiva"},
+        new TipoEspecialidad() { Id = 11, Descripcion = "Oncología Radioterápica"},
+        new TipoEspecialidad() { Id = 12, Descripcion = "Medicina Nuclear"},
+        new TipoEspecialidad() { Id = 13, Descripcion = "Psiquiatría"},
+        new TipoEspecialidad() { Id = 14, Descripcion = "Urologia"},
+        new TipoEspecialidad() { Id = 15, Descripcion = "Oncología Médica"},
+        new TipoEspecialidad() { Id = 16, Descripcion = "Dermatología"},
+    };
+}

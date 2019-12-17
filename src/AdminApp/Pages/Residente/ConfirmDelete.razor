@@ -1,0 +1,39 @@
+﻿@inject IModalService Modal
+
+<div class="confirm-modal">
+    <div>
+        @Message
+    </div>
+    <br />
+    <br />
+    <div class="float-right">
+        <button class="btn btn-danger" @onclick="(() => Confirm())">@YesText</button>
+        <button class="btn btn-primary" @onclick="(() => Cancel())">@NoText</button>
+    </div>
+</div>
+
+
+@code {
+
+    [CascadingParameter] public ModalParameters parameters { get; set; }
+    string Message { get; set; }
+    string YesText { get; set; }
+    string NoText { get; set; }
+
+    protected override void OnInitialized()
+    {
+        Message = parameters.Get<string>("Message");
+        YesText = parameters.Get<string>("YesText");
+        NoText = parameters.Get<string>("NoText");
+    }
+
+    void Confirm()
+    {
+        Modal.Close(ModalResult.Ok<string>(""));
+    }
+
+    void Cancel()
+    {
+        Modal.Cancel();
+    }
+}

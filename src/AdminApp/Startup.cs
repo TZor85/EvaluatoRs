@@ -1,4 +1,5 @@
 using AdminApp.Data;
+using Blazored.Modal;
 using IdentityServerAspNetIdentity.Data.Residentes;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -61,25 +62,29 @@ namespace AdminApp
                 };
             });
 
-            services.AddMvcCore(options =>
+            services.AddControllersWithViews(options =>
             {
-               var policy = new AuthorizationPolicyBuilder()
-                   .RequireAuthenticatedUser()                                                         
-                   .Build();
+                var policy = new AuthorizationPolicyBuilder()
+                    .RequireAuthenticatedUser()
+                    .Build();
                 options.Filters.Add(new AuthorizeFilter(policy));
-                
             });
-            // BLAZOR COOKIE Auth Code (end)
-            // ******
+
+
+            services.AddHttpContextAccessor();
 
             services.AddRazorPages();
-            services.AddServerSideBlazor();            
-            services.AddSingleton<WeatherForecastService>();
-            services.AddSingleton<TokenContainer>();
-            
+            services.AddServerSideBlazor();
+            services.AddServerSideBlazor().AddCircuitOptions(options => { options.DetailedErrors = true; });
+            services.AddServerSideBlazor().AddHubOptions(o =>
+            {
+                o.MaximumReceiveMessageSize = 102400000;
+            });
+
+
             services.AddHttpContextAccessor();
-            //services.AddScoped<IResidentesService, ResidentesService>();
-            services.AddSingleton<ResidentesService>();
+            services.AddSingleton<ResidenteService>();
+            services.AddBlazoredModal();
 
         }
 
@@ -99,8 +104,8 @@ namespace AdminApp
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            
             app.UseRouting();
-                        
             app.UseAuthentication();
             app.UseAuthorization();
             
