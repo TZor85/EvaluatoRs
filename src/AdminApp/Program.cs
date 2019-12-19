@@ -15,6 +15,9 @@ namespace AdminApp
     {
         public static void Main(string[] args)
         {
+            var keySyncfusion = "MTcxOTU2QDMxMzcyZTMzMmUzMEtiYW5GSmxCR1NtRktBUkY1SmU0TzVIZTNFWWh6UFMwRWRFc05PYWFDMWs9";
+            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense(keySyncfusion);
+
             CreateHostBuilder(args).Build().Run();
         }
 

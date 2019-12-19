@@ -10,13 +10,13 @@ namespace AdminApp.Models.Residentes
     public class Residente : ComponentBase
     {
 
-        public Residente()
-        {
-            this.Id = string.IsNullOrEmpty(this.Id) ? Guid.NewGuid().ToString() : this.Id;
-        }
+        //public Residente()
+        //{
+        //    this.Id = string.IsNullOrEmpty(this.Id) ? Guid.NewGuid().ToString() : this.Id;
+        //}
 
         [Key]
-        public string Id { get; set; }
+        public int Id { get; set; }
 
         [Required(ErrorMessage = "El nombre el requerido")]
         [Display(Name = "Nombre")]
@@ -33,7 +33,10 @@ namespace AdminApp.Models.Residentes
 
         [Required]
         [Display(Name = "Especialidad")]
-        public int Especialidad { get; set; }
+        public int? Especialidad { get; set; }
+
+        public List<Evaluacion> Evaluaciones { get; set; } = new List<Evaluacion>();
+
     }
 
     public class TipoEspecialidad

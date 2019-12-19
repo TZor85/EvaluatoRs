@@ -1,4 +1,5 @@
 ﻿@inject IModalService Modal
+@using AdminApp.Models.Residentes;
 
 <div class="confirm-modal">
     <div>
@@ -19,17 +20,20 @@
     string Message { get; set; }
     string YesText { get; set; }
     string NoText { get; set; }
+    Residente residente { get; set; }
 
     protected override void OnInitialized()
     {
         Message = parameters.Get<string>("Message");
         YesText = parameters.Get<string>("YesText");
         NoText = parameters.Get<string>("NoText");
+        residente = parameters.Get<Residente>("Residente");
     }
 
     void Confirm()
     {
-        Modal.Close(ModalResult.Ok<string>(""));
+        residente.Id = -1;
+        Modal.Close(ModalResult.Ok<Residente>(residente));
     }
 
     void Cancel()

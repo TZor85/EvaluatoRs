@@ -20,6 +20,9 @@
 
 @code
 {
+    [Inject]
+    IJSRuntime JsRuntime { get; set; }
+
     string userName;
 
     protected override async Task OnInitializedAsync()
@@ -28,5 +31,10 @@
         var user = authState.User;
 
         userName = user.Identity.Name;
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        this.JsRuntime.Ejs().LoadLocaleData("wwwroot/ej2-locale/src/es.json").SetCulture("es");
     }
 }

@@ -2,16 +2,70 @@
 @inject IModalService Modal
 @inject IModalService ModalService
 @using AdminApp.Models.Residentes
+@using Syncfusion.EJ2.Blazor.Notifications
+@using Syncfusion.EJ2.Blazor.Inputs
 
 
-<div class="panel panel-default">
+<EjsToast @ref="@ToastObj" Target="#toasttarget">
+    <ToastPosition X="Right" Y="Bottom"></ToastPosition>
+</EjsToast>
 
-    <div class="panel-heading">
-        @*<h3 class="panel-title">Nuevo Residente</h3>*@
+<div id="EditarResidente">
+    <div class="col-md-12 col-lg-12 col-sm-12 row mx-0">
+        @*<div class="col-md-12 col-lg-12 col-sm-12 pl-0">*@
+            <div class="card">
+                <EditForm Model="@residente" OnValidSubmit="@HandleValidSubmit">
+                    <div class="card-header bg-azul-claro text-white font-weight-bold">
+                        @(string.IsNullOrWhiteSpace(residente.FirstName) ? "Nuevo Residente" : residente.LastName + ", " + residente.FirstName)
+                    </div>
+
+                    <div class="card-body">
+                        <DataAnnotationsValidator />
+                        <ValidationSummary />
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <EjsTextBox @ref="NombreTextBox" @bind-Value="@(residente.FirstName)" Placeholder="Nombre" FloatLabelType="@FloatLabelType.Auto"></EjsTextBox>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <EjsTextBox @ref="ApellidoTextBox" @bind-Value="@(residente.LastName)" Placeholder="Apellidos" FloatLabelType="@FloatLabelType.Auto"></EjsTextBox>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <EjsNumericTextBox @bind-Value="@(residente.YearResident)" Placeholder="Año residencia" FloatLabelType="@FloatLabelType.Auto"></EjsNumericTextBox>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <EjsDropDownList ID="TipoEspecialidad" @bind-Value="@(residente.Especialidad)" DataSource="@DropDownTipoEspecialidad" Placeholder="Especialidad" FloatLabelType="@FloatLabelType.Auto" Readonly="true" Enabled="false">
+                                    <DropDownListFieldSettings Value="Id" Text="Descripcion"></DropDownListFieldSettings>
+                                </EjsDropDownList>
+                            </div>
+                        </div>
+                    </div>
+
+                </EditForm>
+            </div>
+        @*</div>*@
+
     </div>
 
+    <div class="col-md-12 row mx-0 mt-2">
+        <button @onclick="@HandleValidSubmit" class="e-control e-btn e-lib e-primary mx-2">Guardar</button>
+        <button @onclick="@Cancel" class="e-control e-btn e-lib e-secondary mx-2">Cancelar</button>
+    </div>
+
+</div>
+
+
+
+
+@*<div class="panel panel-default">
     <div class="panel-body">
         <div class="container-fluid">
+
             <div class="form-group">
                 <label for="NameFormControl">Nombre</label>
                 <input type="text" class="form-control" @bind="residente.FirstName" />
@@ -26,7 +80,7 @@
             </div>
             <div class="form-group">
                 <label for="EspecialidadFormControl">Especialidad</label>
-                <select class="form-control" @bind="residente.Especialidad" readonly>
+                <select class="form-control" @bind="residente.Especialidad" readonly disabled>
                     @foreach (var item in DropDownTipoEspecialidad)
                     {
                         <option value="@item.Id">@item.Descripcion</option>
@@ -40,16 +94,20 @@
 
         </div>
     </div>
-</div>
+</div>*@
 
 
 @code {
 
-    
+
     public Residente residente { get; set; } = new Residente();
+    private EjsToast ToastObj;
 
     [CascadingParameter]
     ModalParameters Parameters { get; set; }
+
+    private EjsTextBox NombreTextBox;
+    private EjsTextBox ApellidoTextBox;
 
     public class TipoEspecialidad
     {
@@ -90,8 +148,20 @@
 
     void SaveResidente()
     {
-        
+
         ModalService.Close(ModalResult.Ok<Residente>(residente));
 
+    }
+
+    private void HandleValidSubmit()
+    {
+        if (residente.YearResident < 1 || residente.YearResident > 5)
+        {
+            var toast = new ToastModel() { Title = "Año de residencia!", Content = "El año de residencia debe estar entre 1 y 5.", CssClass = "e-toast-danger", Icon = "e-error toast-icons" };
+            this.ToastObj.Show(toast);
+            return;
+        }
+
+        ModalService.Close(ModalResult.Ok<Residente>(this.residente));
     }
 }

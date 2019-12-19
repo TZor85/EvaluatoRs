@@ -1,0 +1,202 @@
+﻿@page "/evaluacionResidente/{ResidenteId:int}"
+@inject ResidenteService Service;
+@inject NavigationManager NavigationManager
+@using AdminApp.Models.Residentes;
+@using AdminApp.Models;
+@using Syncfusion.EJ2.Blazor.Navigations;
+
+@*Las fechas que tienen que aparecer es por 'Adjunto'*@
+
+    <div class="col-lg-12 col-sm-12 col-md-12">
+        <div class="card">
+            <div class="card-header bg-azul-claro font-weight-bold text-white">
+                @residente.LastName, @residente.FirstName
+                <div class="float-right">
+                    <EjsDropDownList Placeholder="e.g. Australia" Value="@DatetimeCombo" DataSource="@residente.Evaluaciones">
+                        <DropDownListEvents TValue="DateTime" ValueChange="onChange"></DropDownListEvents>
+                        <DropDownListFieldSettings Value="Id" Text="FechaEvaluacion"></DropDownListFieldSettings>
+                    </EjsDropDownList>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="card">
+                    <div class="card-header bg-mediumgreen-color font-weight-bold text-white">
+                        Actitud
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-lg-12 col-sm-12 col-md-12">
+                                <label class="labeltext userselect">Gestión del tiempo</label>
+                                <EjsSlider Value="@gestionTiempo" Type="SliderType.MinRange" Min="0" Max="10" ShowButtons="true">
+                                    <SliderTooltipData IsVisible="true" ShowOn="TooltipShowOn.Hover" Placement="TooltipPlacement.Before"></SliderTooltipData>
+                                    <SliderTicksData Placement="Placement.After" ShowSmallTicks="true" LargeStep="1" SmallStep="1"></SliderTicksData>
+                                    <SliderEvents ValueChange="OnChangeGestionTiempo" TValue="int"></SliderEvents>
+                                </EjsSlider>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-lg-12 col-sm-12 col-md-12">
+                                <label class="labeltext userselect">Coge pacientes de manera espontánea</label>
+                                <EjsSlider Value="@cogePacientes" Type="SliderType.MinRange" Min="0" Max="10" ShowButtons="true">
+                                    <SliderTooltipData IsVisible="true" ShowOn="TooltipShowOn.Hover" Placement="TooltipPlacement.Before"></SliderTooltipData>
+                                    <SliderTicksData Placement="Placement.After" ShowSmallTicks="true" LargeStep="1" SmallStep="1"></SliderTicksData>
+                                    <SliderEvents ValueChange="OnChangeGestionTiempo" TValue="int"></SliderEvents>
+                                </EjsSlider>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-lg-12 col-sm-12 col-md-12">
+                                <label class="labeltext userselect">Tiene interés</label>
+                                <EjsSlider Value="@interes" Type="SliderType.MinRange" Min="0" Max="10" ShowButtons="true">
+                                    <SliderTooltipData IsVisible="true" ShowOn="TooltipShowOn.Hover" Placement="TooltipPlacement.Before"></SliderTooltipData>
+                                    <SliderTicksData Placement="Placement.After" ShowSmallTicks="true" LargeStep="1" SmallStep="1"></SliderTicksData>
+                                    <SliderEvents ValueChange="OnChangeGestionTiempo" TValue="int"></SliderEvents>
+                                </EjsSlider>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-lg-12 col-sm-12 col-md-12">
+                                <label class="labeltext userselect">Consulta bibliografía</label>
+                                <EjsSlider Value="@bibliografia" Type="SliderType.MinRange" Min="0" Max="10" ShowButtons="true">
+                                    <SliderTooltipData IsVisible="true" ShowOn="TooltipShowOn.Hover" Placement="TooltipPlacement.Before"></SliderTooltipData>
+                                    <SliderTicksData Placement="Placement.After" ShowSmallTicks="true" LargeStep="1" SmallStep="1"></SliderTicksData>
+                                    <SliderEvents ValueChange="OnChangeGestionTiempo" TValue="int"></SliderEvents>
+                                </EjsSlider>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-lg-12 col-sm-12 col-md-12">
+                                <label class="labeltext userselect">Prepara los pacientes antes de consultarlos</label>
+                                <EjsSlider Value="@preparaPacientes" Type="SliderType.MinRange" Min="0" Max="10" ShowButtons="true">
+                                    <SliderTooltipData IsVisible="true" ShowOn="TooltipShowOn.Hover" Placement="TooltipPlacement.Before"></SliderTooltipData>
+                                    <SliderTicksData Placement="Placement.After" ShowSmallTicks="true" LargeStep="1" SmallStep="1"></SliderTicksData>
+                                    <SliderEvents ValueChange="OnChangeGestionTiempo" TValue="int"></SliderEvents>
+                                </EjsSlider>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <div class="card">
+                    <div class="card-header bg-mediumgreen-color font-weight-bold text-white">
+                        Conocimientos
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-lg-12 col-sm-12 col-md-12">
+                                <label class="labeltext userselect">Orienta de forma sindrómica al paciente</label>
+                                <EjsSlider Value="@orientaPaciente" Type="SliderType.MinRange" Min="0" Max="10" ShowButtons="true">
+                                    <SliderTooltipData IsVisible="true" ShowOn="TooltipShowOn.Hover" Placement="TooltipPlacement.Before"></SliderTooltipData>
+                                    <SliderTicksData Placement="Placement.After" ShowSmallTicks="true" LargeStep="1" SmallStep="1"></SliderTicksData>
+                                    <SliderEvents ValueChange="OnChangeGestionTiempo" TValue="int"></SliderEvents>
+                                </EjsSlider>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-lg-12 col-sm-12 col-md-12">
+                                <label class="labeltext userselect">Aplica el tratamiento empírico</label>
+                                <EjsSlider Value="@aplicaTratamiento" Type="SliderType.MinRange" Min="0" Max="10" ShowButtons="true">
+                                    <SliderTooltipData IsVisible="true" ShowOn="TooltipShowOn.Hover" Placement="TooltipPlacement.Before"></SliderTooltipData>
+                                    <SliderTicksData Placement="Placement.After" ShowSmallTicks="true" LargeStep="1" SmallStep="1"></SliderTicksData>
+                                    <SliderEvents ValueChange="OnChangeGestionTiempo" TValue="int"></SliderEvents>
+                                </EjsSlider>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-lg-12 col-sm-12 col-md-12">
+                                <label class="labeltext userselect">Establece un diagnóstico</label>
+                                <EjsSlider Value="@estableceDiagnostico" Type="SliderType.MinRange" Min="0" Max="10" ShowButtons="true">
+                                    <SliderTooltipData IsVisible="true" ShowOn="TooltipShowOn.Hover" Placement="TooltipPlacement.Before"></SliderTooltipData>
+                                    <SliderTicksData Placement="Placement.After" ShowSmallTicks="true" LargeStep="1" SmallStep="1"></SliderTicksData>
+                                    <SliderEvents ValueChange="OnChangeGestionTiempo" TValue="int"></SliderEvents>
+                                </EjsSlider>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-lg-12 col-sm-12 col-md-12">
+                                <label class="labeltext userselect">Reevalua al paciente durante su estancia en Urgencias</label>
+                                <EjsSlider Value="@reevaluaPaciente" Type="SliderType.MinRange" Min="0" Max="10" ShowButtons="true">
+                                    <SliderTooltipData IsVisible="true" ShowOn="TooltipShowOn.Hover" Placement="TooltipPlacement.Before"></SliderTooltipData>
+                                    <SliderTicksData Placement="Placement.After" ShowSmallTicks="true" LargeStep="1" SmallStep="1"></SliderTicksData>
+                                    <SliderEvents ValueChange="OnChangeGestionTiempo" TValue="int"></SliderEvents>
+                                </EjsSlider>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+    @code {
+
+        [Parameter]
+        public int ResidenteId { get; set; }
+
+        private List<Residente> residentesList { get; set; }
+        private Residente residente { get; set; }
+        private Evaluacion evaluacionInicial { get; set; }
+        private DateTime DatetimeCombo { get; set; }
+
+        private int NEvaluaciones { get; set; }
+
+        private int gestionTiempo { get; set; } = 0;
+        private int cogePacientes { get; set; } = 0;
+        private int interes { get; set; } = 0;
+        private int bibliografia { get; set; } = 0;
+        private int preparaPacientes { get; set; } = 0;
+        private int orientaPaciente { get; set; } = 0;
+        private int aplicaTratamiento { get; set; } = 0;
+        private int estableceDiagnostico { get; set; } = 0;
+        private int reevaluaPaciente { get; set; } = 0;
+
+        protected override async Task OnInitializedAsync()
+        {
+            residentesList = await Service.GetResidentesAsync();
+            residente = residentesList.Where(x => x.Id == ResidenteId)?.FirstOrDefault() ?? new Residente();
+
+            if (string.IsNullOrWhiteSpace(residente.FirstName))
+            {
+                NavigationManager.NavigateTo("/", true);
+            }
+            else
+            {
+                NEvaluaciones = residente.Evaluaciones.Count - 1;
+                evaluacionInicial = residente.Evaluaciones.LastOrDefault();
+
+                gestionTiempo = evaluacionInicial.GestionTiempo;
+                cogePacientes = evaluacionInicial.CogePacientes;
+                interes = evaluacionInicial.Interes;
+                bibliografia = evaluacionInicial.Bibliografia;
+                preparaPacientes = evaluacionInicial.PreparaPacientes;
+                orientaPaciente = evaluacionInicial.OrientaPaciente;
+                aplicaTratamiento = evaluacionInicial.AplicaTratamiento;
+                estableceDiagnostico = evaluacionInicial.EstableceDiagnostico;
+                reevaluaPaciente = evaluacionInicial.ReevaluaPaciente;
+
+            }
+
+
+        }
+
+        public void OnChangeGestionTiempo(SliderChangeEventArgs<int> args)
+        {
+            //valorGestionTiempo = args.Value;
+        }
+
+        private void onChange(Syncfusion.EJ2.Blazor.DropDowns.ChangeEventArgs<DateTime> args)
+        {
+            var x  = args.Value;
+        }
+
+    }
